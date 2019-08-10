@@ -46,24 +46,18 @@ class YoutrackApi: KoinComponent {
     private val config by inject<Config>()
     private val json = defaultSerializer()
 
-    suspend fun listProjects(): List<Project> {
-        return client.get {
-            youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName")
-        }
+    suspend fun listProjects(): List<Project> = client.get {
+        youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName")
     }
 
-    suspend fun getProject(name: String): List<Project> {
-        return client.get {
-            youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName&query=$name")
-        }
+    suspend fun getProject(name: String): List<Project> = client.get {
+        youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName&query=$name")
     }
 
-    suspend fun createIssue(createIssue: CreateIssue): Issue {
-        return client.post<Issue> {
-            youtrackDefault("/youtrack/api/issues")
-            // NOTE: body = createIssue does not works!
-            body = json.write(createIssue)
-        }
+    suspend fun createIssue(createIssue: CreateIssue): Issue = client.post<Issue> {
+        youtrackDefault("/youtrack/api/issues")
+        // NOTE: body = createIssue does not works!
+        body = json.write(createIssue)
     }
 
     suspend fun createIssueComment(issueId: String, text: String): IssueComment = client.post {
