@@ -33,6 +33,8 @@ dependencies {
 
     // http client
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-json:$ktorVersion")
+    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
 
     // case conversion
     implementation("com.google.guava:guava:28.0-jre")
