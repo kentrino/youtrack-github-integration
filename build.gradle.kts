@@ -1,7 +1,21 @@
 import java.util.Properties
 
+buildscript {
+    repositories {
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.41")
+    }
+}
+
+apply(plugin = "org.jetbrains.kotlin.jvm")
+
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.3.41")
+    // TODO: plugins DSL does not work with multiple project
+    // kotlin("jvm")
     application
 }
 
