@@ -61,7 +61,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.kentrino.AppKt"
+    mainClassName = "com.kentrino.Application"
 }
 
 tasks.getByName<JavaExec>("run") {

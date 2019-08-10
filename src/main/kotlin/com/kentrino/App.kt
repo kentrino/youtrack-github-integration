@@ -1,3 +1,4 @@
+@file:JvmName("Application")
 package com.kentrino
 
 import io.ktor.application.Application
