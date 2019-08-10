@@ -5,6 +5,9 @@ plugins {
     application
 }
 
+group = "com.kentrino"
+version = "0.0.1"
+
 repositories {
     jcenter()
 }
