@@ -32,6 +32,9 @@ dependencies {
     // http client
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
+    // case conversion
+    implementation("com.google.guava:guava:28.0-jre")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
