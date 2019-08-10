@@ -49,16 +49,15 @@ fun Application.injectDependencies() {
 
 fun Application.main() {
     routing {
-        // val connection by inject<Database>()
         val api by inject<YoutrackApi>()
 
         get("/") {
             /*
-            val project = api.getProject("kentrnio")
+            val project = api.getProject("TEST")
             val issue = api.createIssue(CreateIssue(
                     project = project.first(),
                     summary = "test",
-                    description = "あああああああああああああああ"
+                    description = "てすと"
             ))
             */
             val issue = api.findIssue("KENTRNIO-5").first()

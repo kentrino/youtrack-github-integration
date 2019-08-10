@@ -50,8 +50,9 @@ class YoutrackApi: KoinComponent {
         youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName")
     }
 
-    suspend fun getProject(name: String): List<Project> = client.get {
-        youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName&query=$name")
+    // query can be Name or ID
+    suspend fun getProject(query: String): List<Project> = client.get {
+        youtrackDefault("/youtrack/api/admin/projects?fields=id,query,shortName&query=$query")
     }
 
     // idReadable is like PROJECT-43
