@@ -1,6 +1,5 @@
 package com.kentrino
 
-import com.kentrino.db.UfoSightings
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -11,9 +10,6 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
