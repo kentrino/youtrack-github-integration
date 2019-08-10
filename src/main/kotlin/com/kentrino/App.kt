@@ -3,6 +3,8 @@ package com.kentrino
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.http.ContentType
 import io.ktor.response.respondText
 import io.ktor.routing.get
@@ -43,9 +45,11 @@ fun Application.injectDependencies() {
 fun Application.main() {
     routing {
         val connection by inject<Database>()
+        val client by inject<HttpClient>()
 
         get("/") {
-            call.respondText("Hi!", contentType = ContentType.Text.Plain)
+            val result = client.get<ByteArray>("http://abehiroshi.la.coocan.jp/top.htm")
+            call.respondText(String(result), contentType = ContentType.Text.Plain)
         }
     }
 }
