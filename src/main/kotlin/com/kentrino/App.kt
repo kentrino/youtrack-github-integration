@@ -9,12 +9,14 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.util.KtorExperimentalAPI
 import org.jetbrains.exposed.sql.Database
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 
 
+@KtorExperimentalAPI
 fun main(args: Array<String>) {
     embeddedServer(
             factory = Netty,
@@ -30,6 +32,7 @@ fun main(args: Array<String>) {
     ).start()
 }
 
+@KtorExperimentalAPI
 fun Application.injectDependencies() {
     install(Koin) {
         SLF4JLogger()

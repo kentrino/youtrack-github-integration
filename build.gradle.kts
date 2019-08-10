@@ -29,6 +29,9 @@ dependencies {
 
     runtimeOnly("org.slf4j:slf4j-log4j12:1.7.26")
 
+    // http client
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
