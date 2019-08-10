@@ -52,11 +52,14 @@ fun Application.main() {
 
         get("/") {
             val project = api.getProject("kentrnio")
-            val res = api.createIssue(CreateIssue(
+            val issue = api.createIssue(CreateIssue(
                     project = project.first(),
                     summary = "test",
                     description = "あああああああああああああああ"
             ))
+            val res = api.createIssueComment(issue.id, """
+            [阿部寛](http://abehiroshi.la.coocan.jp/top.htm)
+            """.trimIndent())
             call.respond(res)
         }
     }

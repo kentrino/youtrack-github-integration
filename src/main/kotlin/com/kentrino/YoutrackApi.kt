@@ -25,14 +25,26 @@ data class CreateIssue(
 )
 
 data class Issue(
-        val id: String?,
+        val id: String,
         // Issue
+        val `$type`: String
+)
+
+data class CreateIssueComment(
+        val text: String,
+        val usesMarkdown: Boolean = true
+)
+
+data class IssueComment(
+        val id: String,
+        // IssueComment
         val `$type`: String
 )
 
 class YoutrackApi: KoinComponent {
     private val client by inject<HttpClient>()
     private val config by inject<Config>()
+    private val json = defaultSerializer()
 
     suspend fun listProjects(): List<Project> {
         return client.get {
@@ -47,11 +59,16 @@ class YoutrackApi: KoinComponent {
     }
 
     suspend fun createIssue(createIssue: CreateIssue): Issue {
-        val json = defaultSerializer()
         return client.post<Issue> {
             youtrackDefault("/youtrack/api/issues")
+            // NOTE: body = createIssue does not works!
             body = json.write(createIssue)
         }
+    }
+
+    suspend fun createIssueComment(issueId: String, text: String): IssueComment = client.post {
+        youtrackDefault("/youtrack/api/issues/$issueId/comments")
+        body = json.write(CreateIssueComment(text = text))
     }
 
     private fun HttpRequestBuilder.youtrackDefault(path: String) {
