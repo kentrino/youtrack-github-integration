@@ -54,7 +54,12 @@ class YoutrackApi: KoinComponent {
         youtrackDefault("/youtrack/api/admin/projects?fields=id,name,shortName&query=$name")
     }
 
-    suspend fun createIssue(createIssue: CreateIssue): Issue = client.post<Issue> {
+    // idReadable is like PROJECT-43
+    suspend fun findIssue(idReadable: String): List<Issue> = client.get {
+        youtrackDefault("/youtrack/api/issues?query=issue%20id:$idReadable")
+    }
+
+    suspend fun createIssue(createIssue: CreateIssue): Issue = client.post {
         youtrackDefault("/youtrack/api/issues")
         // NOTE: body = createIssue does not works!
         body = json.write(createIssue)

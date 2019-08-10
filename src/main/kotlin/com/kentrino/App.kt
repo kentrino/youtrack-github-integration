@@ -14,6 +14,8 @@ import io.ktor.util.KtorExperimentalAPI
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 
 @KtorExperimentalAPI
@@ -51,13 +53,17 @@ fun Application.main() {
         val api by inject<YoutrackApi>()
 
         get("/") {
+            /*
             val project = api.getProject("kentrnio")
             val issue = api.createIssue(CreateIssue(
                     project = project.first(),
                     summary = "test",
                     description = "あああああああああああああああ"
             ))
+            */
+            val issue = api.findIssue("KENTRNIO-5").first()
             val res = api.createIssueComment(issue.id, """
+            ${ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)}
             [阿部寛](http://abehiroshi.la.coocan.jp/top.htm)
             """.trimIndent())
             call.respond(res)
