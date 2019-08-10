@@ -4,8 +4,12 @@ import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.client.HttpClient
+import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.get
+import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
+import io.ktor.jackson.jackson
+import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
@@ -42,6 +46,9 @@ fun Application.injectDependencies() {
         SLF4JLogger()
         modules(module(config))
     }
+    install(ContentNegotiation) {
+        jackson {}
+    }
 }
 
 fun Application.main() {
@@ -50,8 +57,7 @@ fun Application.main() {
         val youtrackApi by inject<YoutrackApi>()
 
         get("/") {
-            youtrackApi.listProjects()
-            call.respondText("Hi!", contentType = ContentType.Text.Plain)
+            call.respond(youtrackApi.getProject("kentrnio"))
         }
     }
 }

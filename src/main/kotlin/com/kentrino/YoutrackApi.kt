@@ -25,6 +25,15 @@ class YoutrackApi: KoinComponent {
         }
     }
 
+    suspend fun getProject(name: String): List<Project> {
+        return client.get {
+            youtrackDefault()
+            url {
+                encodedPath = "/youtrack/api/admin/projects?fields=id,name,shortName&query=$name"
+            }
+        }
+    }
+
     private fun HttpRequestBuilder.youtrackDefault() {
         url {
             protocol = URLProtocol.HTTPS
