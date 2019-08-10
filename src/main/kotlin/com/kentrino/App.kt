@@ -3,20 +3,14 @@ package com.kentrino
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.client.HttpClient
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.request.get
 import io.ktor.features.ContentNegotiation
-import io.ktor.http.ContentType
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
-import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
-import org.jetbrains.exposed.sql.Database
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
@@ -54,10 +48,16 @@ fun Application.injectDependencies() {
 fun Application.main() {
     routing {
         // val connection by inject<Database>()
-        val youtrackApi by inject<YoutrackApi>()
+        val api by inject<YoutrackApi>()
 
         get("/") {
-            call.respond(youtrackApi.getProject("kentrnio"))
+            val project = api.getProject("kentrnio")
+            val res = api.createIssue(CreateIssue(
+                    project = project.first(),
+                    summary = "test",
+                    description = "あああああああああああああああ"
+            ))
+            call.respond(res)
         }
     }
 }
