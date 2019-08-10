@@ -46,12 +46,12 @@ fun Application.injectDependencies() {
 
 fun Application.main() {
     routing {
-        val connection by inject<Database>()
-        val client by inject<HttpClient>()
+        // val connection by inject<Database>()
+        val youtrackApi by inject<YoutrackApi>()
 
         get("/") {
-            val result = client.get<ByteArray>("http://abehiroshi.la.coocan.jp/top.htm")
-            call.respondText(String(result), contentType = ContentType.Text.Plain)
+            youtrackApi.listProjects()
+            call.respondText("Hi!", contentType = ContentType.Text.Plain)
         }
     }
 }
