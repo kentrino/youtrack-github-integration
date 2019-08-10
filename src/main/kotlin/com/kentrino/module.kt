@@ -5,6 +5,8 @@ import com.kentrino.db.createHikariDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.engine.cio.endpoint
+import io.ktor.client.features.json.JacksonSerializer
+import io.ktor.client.features.json.JsonFeature
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
@@ -29,6 +31,10 @@ fun module(config: Config): Module = module(createdAtStart = true) {
 
     single {
         HttpClient(CIO) {
+            install(JsonFeature) {
+                serializer = JacksonSerializer {
+                }
+            }
             engine {
                 maxConnectionsCount = 1000
 
@@ -54,6 +60,10 @@ fun module(config: Config): Module = module(createdAtStart = true) {
                 }
             }
         }
+    }
+
+    single {
+        YoutrackApi()
     }
 
     single {
