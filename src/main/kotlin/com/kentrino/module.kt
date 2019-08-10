@@ -15,7 +15,7 @@ import org.koin.dsl.module
 
 
 @KtorExperimentalAPI
-fun module(): Module = module(createdAtStart = true) {
+fun module(config: Config): Module = module(createdAtStart = true) {
     single<Database> {
         val dataSource = createHikariDataSource()
         val connection = Database.connect(dataSource)
@@ -54,5 +54,9 @@ fun module(): Module = module(createdAtStart = true) {
                 }
             }
         }
+    }
+
+    single {
+        config
     }
 }

@@ -36,9 +36,11 @@ fun main(args: Array<String>) {
 
 @KtorExperimentalAPI
 fun Application.injectDependencies() {
+    val config = Config()
+
     install(Koin) {
         SLF4JLogger()
-        modules(module())
+        modules(module(config))
     }
 }
 
