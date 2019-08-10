@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("org.jetbrains.kotlin.jvm").version("1.3.41")
     application
@@ -41,4 +43,15 @@ dependencies {
 
 application {
     mainClassName = "com.kentrino.AppKt"
+}
+
+tasks.getByName<JavaExec>("run") {
+    val propertiesFile = project.rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        Properties().apply {
+            load(propertiesFile.inputStream())
+            @Suppress("UNCHECKED_CAST")
+            systemProperties(this as Map<String, String>)
+        }
+    }
 }
