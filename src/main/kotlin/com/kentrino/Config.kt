@@ -1,7 +1,11 @@
 package com.kentrino
 
+import com.google.common.base.CaseFormat
+
 private fun assertLoad(key: String): String {
-    return System.getenv(key) ?: System.getProperty(key) ?: throw Exception("You have to define $key")
+    val propertyName = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, key)
+    println(System.getProperty(propertyName))
+    return (System.getenv(key) ?: System.getProperty(propertyName)) ?: throw Exception("You have to define $key")
 }
 
 data class Config(
