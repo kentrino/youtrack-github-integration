@@ -56,6 +56,9 @@ dependencies {
     // case conversion
     implementation("com.google.guava:guava:28.0-jre")
 
+    // auth
+    implementation("io.ktor:ktor-auth:$ktorVersion")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
