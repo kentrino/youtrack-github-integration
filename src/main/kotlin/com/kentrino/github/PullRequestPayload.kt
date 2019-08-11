@@ -12,7 +12,9 @@ data class PullRequestPayload(
         val user: User,
         val head: Head,
         val htmlUrl: String,
-        val title: String
+        val title: String,
+        val merged: Boolean,
+        val mergeCommitSha: String?
     ) {
         data class User(
                 // name

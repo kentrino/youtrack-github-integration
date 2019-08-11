@@ -18,11 +18,14 @@ class PayloadHandler : KoinComponent {
     }
 
     private fun comment(action: PullRequestActionTypes.Opened, pullRequestPayload: PullRequestPayload): String {
+
         return "pull request [${pullRequestPayload.pullRequest.title}](${pullRequestPayload.pullRequest.htmlUrl})" +
                 " opened by [${pullRequestPayload.pullRequest.user.login}](${pullRequestPayload.pullRequest.user.htmlUrl})"
     }
 
-    private fun comment(action: PullRequestActionTypes.Closed, pullRequestPayload: PullRequestPayload): String {
-        return "pull request [${pullRequestPayload.pullRequest.title}](${pullRequestPayload.pullRequest.htmlUrl}) closed"
-    }
+    private fun comment(action: PullRequestActionTypes.Closed, pullRequestPayload: PullRequestPayload): String =
+            when (pullRequestPayload.pullRequest.merged) {
+                true -> "pull request [${pullRequestPayload.pullRequest.title}](${pullRequestPayload.pullRequest.htmlUrl}) merged"
+                false -> "pull request [${pullRequestPayload.pullRequest.title}](${pullRequestPayload.pullRequest.htmlUrl}) closed"
+            }
 }
