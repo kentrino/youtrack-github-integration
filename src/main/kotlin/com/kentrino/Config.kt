@@ -9,6 +9,7 @@ private fun assertLoad(key: String): String {
 }
 
 data class Config(
+        val port: Int = assertLoad("PORT").toInt(),
         val youtrack: YoutrackConfig = YoutrackConfig()
 )
 

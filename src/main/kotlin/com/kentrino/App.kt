@@ -24,15 +24,17 @@ import java.time.format.DateTimeFormatter
 
 @KtorExperimentalAPI
 fun main(args: Array<String>) {
+    val config = Config()
+
     embeddedServer(
             factory = Netty,
             host = "0.0.0.0",
-            port = 10080,
+            port = config.port,
             configure = {
                 callGroupSize = 200
             },
             module = {
-                injectDependencies()
+                injectDependencies(config)
                 main()
             }
     ).start()
@@ -42,8 +44,7 @@ const val basicAuth = "basicAuth"
 val authorizedCredential = UserPasswordCredential(name = "kentrino", password = "the-best-password-ever")
 
 @KtorExperimentalAPI
-fun Application.injectDependencies() {
-    val config = Config()
+fun Application.injectDependencies(config: Config) {
 
     install(CallLogging) {
         level = Level.INFO
