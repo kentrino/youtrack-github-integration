@@ -5,14 +5,16 @@ import com.kentrino.github.githubHeaders
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.application.log
 import io.ktor.auth.*
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
+import io.ktor.features.DoubleReceive
 import io.ktor.jackson.jackson
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.post
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -61,6 +63,10 @@ fun Application.injectDependencies(config: Config) {
         jackson {}
     }
 
+    install(DoubleReceive) {
+        receiveEntireContent = true
+    }
+
     install(Authentication) {
         basic(name = basicAuth) {
             realm = "App"
@@ -75,6 +81,7 @@ fun Application.injectDependencies(config: Config) {
     }
 }
 
+@KtorExperimentalAPI
 fun Application.main() {
     routing {
         val api by inject<YoutrackApi>()
