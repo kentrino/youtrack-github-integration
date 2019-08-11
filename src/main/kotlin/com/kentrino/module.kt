@@ -1,8 +1,6 @@
 package com.kentrino
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.kentrino.db.UfoSightings
-import com.kentrino.db.createHikariDataSource
 import com.kentrino.ext.jackson.configure
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -10,11 +8,6 @@ import io.ktor.client.engine.cio.endpoint
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.util.KtorExperimentalAPI
-import kotlinx.coroutines.runBlocking
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.koin.core.KoinComponent
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.slf4j.Logger
@@ -69,17 +62,10 @@ fun module(config: Config, logger: Logger): Module = module(createdAtStart = tru
         }
     }
 
-    single {
-        YoutrackApi()
-    }
-
-    single {
-        config
-    }
-
-    single {
-        PayloadHandler()
-    }
+    single { YoutrackApi() }
+    single { config }
+    single { PayloadHandler() }
+    single { YoutrackService() }
 
     single {
         jacksonObjectMapper().apply {
