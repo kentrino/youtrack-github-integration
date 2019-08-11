@@ -41,10 +41,10 @@ fun main(args: Array<String>) {
 }
 
 const val basicAuth = "basicAuth"
-val authorizedCredential = UserPasswordCredential(name = "kentrino", password = "the-best-password-ever")
 
 @KtorExperimentalAPI
 fun Application.injectDependencies(config: Config) {
+    val authorizedCredential = UserPasswordCredential(name = "kentrino", password = config.youtrack.authorizationToken)
 
     install(CallLogging) {
         level = Level.INFO
