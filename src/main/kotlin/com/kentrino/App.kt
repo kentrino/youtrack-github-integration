@@ -1,14 +1,17 @@
 @file:JvmName("Application")
 package com.kentrino
 
+import com.kentrino.github.githubHeaders
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.application.log
 import io.ktor.auth.*
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
+import io.ktor.response.respondText
 import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -75,6 +78,13 @@ fun Application.injectDependencies(config: Config) {
 fun Application.main() {
     routing {
         val api by inject<YoutrackApi>()
+
+        post<ByteArray>("/webhooks/github") {
+            val header = call.githubHeaders()
+            println(header)
+            println(String(it))
+            call.respondText("Hi!")
+        }
 
         authenticate(basicAuth) {
             post("/{issue}/abe") {
