@@ -6,13 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.kentrino.ext.jackson.configure
-import com.kentrino.github.GitHubEventTypes
-import com.kentrino.github.PullRequestPayload
-import com.kentrino.github.github
-import com.kentrino.github.githubHeaders
+import com.kentrino.github.*
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.application.log
 import io.ktor.auth.*
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
@@ -29,6 +27,7 @@ import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.Logger.SLF4JLogger
 import org.koin.core.context.startKoin
+import org.koin.core.inject
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
@@ -67,7 +66,7 @@ fun Application.injectDependencies(config: Config) {
 
     install(Koin) {
         SLF4JLogger()
-        modules(module(config))
+        modules(module(config, log))
     }
 
     install(ContentNegotiation) {
@@ -101,7 +100,7 @@ fun Application.injectDependencies(config: Config) {
 @KtorExperimentalAPI
 fun Application.main() {
     routing {
-        val api by inject<YoutrackApi>()
+        val youtrackService by inject<YoutrackService>()
         val objectMapper by inject<ObjectMapper>()
         val payloadHandler by inject<PayloadHandler>()
 
@@ -110,11 +109,11 @@ fun Application.main() {
                 val header = call.githubHeaders()
                 val payloadJson = String(it)
                 when (header.event) {
-                    GitHubEventTypes.pull_request -> {
+                    EventType.PullRequest -> {
                         val p = objectMapper.readValue<PullRequestPayload>(payloadJson)
                         payloadHandler.handle(p)
                     }
-                    GitHubEventTypes.push -> {  }
+                    EventType.Push -> {  }
                 }
                 call.respondText("")
             }
@@ -123,20 +122,12 @@ fun Application.main() {
         authenticate(basicAuth) {
             post("/{issue}/abe") {
                 val issueId = call.parameters["issue"] ?: throw Exception("you must specify issue")
-                /*
-                val project = api.getProject("TEST")
-                val issue = api.createIssue(CreateIssue(
-                        project = project.first(),
-                        summary = "test",
-                        description = "てすと"
-                ))
-                */
-                val issue = api.findIssue(issueId).first()
-                val res = api.createIssueComment(issue.id, """
+                val comment = """
                 ${ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)}
                 [阿部寛](http://abehiroshi.la.coocan.jp/top.htm)
-                """.trimIndent())
-                call.respond(res)
+                """.trimIndent()
+                youtrackService.addIssueComment(issueId, comment)
+                call.respond("Hi!")
             }
         }
     }

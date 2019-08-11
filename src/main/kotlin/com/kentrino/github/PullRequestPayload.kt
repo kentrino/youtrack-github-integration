@@ -10,9 +10,12 @@ data class PullRequestPayload(
 
     data class PullRequest(
         val user: User,
-        val head: Head
+        val head: Head,
+        val htmlUrl: String,
+        val title: String
     ) {
         data class User(
+                // name
                 val login: String,
                 val htmlUrl: String
         )

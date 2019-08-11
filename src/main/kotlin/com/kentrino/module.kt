@@ -17,10 +17,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.KoinComponent
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.slf4j.Logger
 
 
 @KtorExperimentalAPI
-fun module(config: Config): Module = module(createdAtStart = true) {
+fun module(config: Config, logger: Logger): Module = module(createdAtStart = true) {
     /*
     single<Database> {
         val dataSource = createHikariDataSource()
@@ -33,6 +34,8 @@ fun module(config: Config): Module = module(createdAtStart = true) {
         connection
     }
     */
+    single { logger }
+
     single {
         HttpClient(CIO) {
             install(JsonFeature) {
