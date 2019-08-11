@@ -67,9 +67,7 @@ fun Application.injectDependencies(config: Config) {
 
     install(Koin) {
         SLF4JLogger()
-        startKoin {
-            modules(module(config))
-        }
+        modules(module(config))
     }
 
     install(ContentNegotiation) {
