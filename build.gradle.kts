@@ -59,6 +59,9 @@ dependencies {
     // auth
     implementation("io.ktor:ktor-auth:$ktorVersion")
 
+    // for webhook auth
+    implementation("commons-codec:commons-codec:1.10")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
