@@ -24,6 +24,7 @@ version = "0.0.1"
 
 repositories {
     jcenter()
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -61,6 +62,8 @@ dependencies {
 
     // for webhook auth
     implementation("commons-codec:commons-codec:1.10")
+
+    implementation("io.github.justincase-jp.jackson-kotlin-commons", "textual", "2.1.1")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
