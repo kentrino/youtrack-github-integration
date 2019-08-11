@@ -1,6 +1,13 @@
 @file:JvmName("Application")
 package com.kentrino
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.kentrino.ext.jackson.configure
+import com.kentrino.github.GitHubEventTypes
+import com.kentrino.github.PullRequestPayload
 import com.kentrino.github.github
 import com.kentrino.github.githubHeaders
 import io.ktor.application.Application
@@ -21,6 +28,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.Logger.SLF4JLogger
+import org.koin.core.context.startKoin
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
@@ -59,10 +67,15 @@ fun Application.injectDependencies(config: Config) {
 
     install(Koin) {
         SLF4JLogger()
-        modules(module(config))
+        startKoin {
+            modules(module(config))
+        }
     }
+
     install(ContentNegotiation) {
-        jackson {}
+        jackson {
+            configure()
+        }
     }
 
     install(DoubleReceive) {
@@ -91,13 +104,21 @@ fun Application.injectDependencies(config: Config) {
 fun Application.main() {
     routing {
         val api by inject<YoutrackApi>()
+        val objectMapper by inject<ObjectMapper>()
+        val payloadHandler by inject<PayloadHandler>()
 
         authenticate(gitHubWebhookAuth) {
             post<ByteArray>("/webhooks/github") {
                 val header = call.githubHeaders()
-                println(header)
-                println(String(it))
-                call.respondText("Hi!")
+                val payloadJson = String(it)
+                when (header.event) {
+                    GitHubEventTypes.pull_request -> {
+                        val p = objectMapper.readValue<PullRequestPayload>(payloadJson)
+                        payloadHandler.handle(p)
+                    }
+                    GitHubEventTypes.push -> {  }
+                }
+                call.respondText("")
             }
         }
 

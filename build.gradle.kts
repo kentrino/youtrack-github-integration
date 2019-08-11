@@ -64,6 +64,7 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
 }
 
 application {
