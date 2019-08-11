@@ -10,6 +10,7 @@ private fun assertLoad(key: String): String {
 
 data class Config(
         val port: Int = assertLoad("PORT").toInt(),
+        val gitHubWebhookSecret: String = assertLoad("GIT_HUB_WEBHOOK_SECRET"),
         val youtrack: YoutrackConfig = YoutrackConfig()
 )
 

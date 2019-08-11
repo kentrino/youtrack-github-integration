@@ -1,6 +1,7 @@
 @file:JvmName("Application")
 package com.kentrino
 
+import com.kentrino.github.github
 import com.kentrino.github.githubHeaders
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -46,6 +47,7 @@ fun main(args: Array<String>) {
 }
 
 const val basicAuth = "basicAuth"
+const val gitHubWebhookAuth = "githubAuth"
 
 @KtorExperimentalAPI
 fun Application.injectDependencies(config: Config) {
@@ -68,6 +70,10 @@ fun Application.injectDependencies(config: Config) {
     }
 
     install(Authentication) {
+        github(name = gitHubWebhookAuth) {
+            secret = config.gitHubWebhookSecret
+        }
+
         basic(name = basicAuth) {
             realm = "App"
             validate { credentials ->
@@ -86,11 +92,13 @@ fun Application.main() {
     routing {
         val api by inject<YoutrackApi>()
 
-        post<ByteArray>("/webhooks/github") {
-            val header = call.githubHeaders()
-            println(header)
-            println(String(it))
-            call.respondText("Hi!")
+        authenticate(gitHubWebhookAuth) {
+            post<ByteArray>("/webhooks/github") {
+                val header = call.githubHeaders()
+                println(header)
+                println(String(it))
+                call.respondText("Hi!")
+            }
         }
 
         authenticate(basicAuth) {
